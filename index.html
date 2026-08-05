@@ -42,6 +42,7 @@
       overflow-x: hidden;
     }
 
+    /* Capa oscura de fondo para lectura adecuada */
     body::before {
       content: "";
       position: fixed;
@@ -51,7 +52,7 @@
     }
 
     /* ==========================================
-       PANTALLA DE APERTURA (SOBRE INICIAL)
+       PANTALLA DE APERTURA (EL SOBRE INICIAL)
        ========================================== */
     #envelope-screen {
       position: fixed;
@@ -91,6 +92,7 @@
       margin-top: 5px;
     }
 
+    /* Contenedor gráfico del Sobre */
     .envelope-wrapper {
       position: relative;
       width: 100%;
@@ -106,6 +108,7 @@
       overflow: hidden;
     }
 
+    /* Sello del sobre y botón abrir */
     .seal-btn {
       position: absolute;
       width: 85px;
@@ -132,7 +135,7 @@
     }
 
     /* ==========================================
-       CONTENEDOR PRINCIPAL
+       CONTENEDOR PRINCIPAL Y TARJETAS FLOTANTES
        ========================================== */
     .app-container {
       width: 100%;
@@ -201,6 +204,7 @@
       transform: translateY(-2px);
     }
 
+    /* Portada Principal tras abrir */
     .hero-card {
       padding: 50px 20px 40px 20px;
       background: linear-gradient(180deg, rgba(250,248,245,0.92) 0%, rgba(250,248,245,1) 100%);
@@ -228,28 +232,8 @@
       line-height: 1.6;
     }
 
-    /* BOTÓN FLOTANTE MÚSICA */
-    .music-toggle-btn {
-      position: fixed;
-      bottom: 25px;
-      right: 20px;
-      width: 45px;
-      height: 45px;
-      background: var(--dorado);
-      color: var(--blanco);
-      border-radius: 50%;
-      border: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      cursor: pointer;
-      z-index: 1500;
-      font-size: 1.2rem;
-    }
-
     /* ==========================================
-       MODALES
+       MODALES (VER MÁS)
        ========================================== */
     .modal-overlay {
       display: none;
@@ -337,16 +321,6 @@
 </head>
 <body>
 
-  <!-- AUDIO HTML5 CON REPRODUCCIÓN AL CLIC -->
-  <audio id="wedding-audio" loop preload="auto">
-    <source src="perfect.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- BOTÓN FLOTANTE PARA ACTIVAR/DESACTIVAR -->
-  <button class="music-toggle-btn" id="music-btn" onclick="toggleAudio()">
-    🎵
-  </button>
-
   <!-- 1. PANTALLA INICIAL DE SOBRE -->
   <div id="envelope-screen">
     <div class="envelope-header">
@@ -361,7 +335,7 @@
     <div style="visibility: hidden;">Espaciador</div>
   </div>
 
-  <!-- 2. CONTENIDO PRINCIPAL -->
+  <!-- 2. CONTENIDO PRINCIPAL DE LA INVITACIÓN -->
   <div class="app-container">
 
     <!-- HERO / PORTADA -->
@@ -373,7 +347,7 @@
       </p>
     </div>
 
-    <!-- SECCIÓN FECHA -->
+    <!-- SECCIÓN FECHA (Antes "Ceremonia") -->
     <div class="card">
       <svg class="card-icon" viewBox="0 0 24 24">
         <circle cx="9" cy="12" r="5"></circle>
@@ -485,34 +459,10 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT: ACTIVACIÓN AL HACER CLIC -->
+  <!-- JAVASCRIPT DE INTERACCIÓN Y APERTURA -->
   <script>
-    const audio = document.getElementById('wedding-audio');
-    const musicBtn = document.getElementById('music-btn');
-
     function openEnvelope() {
-      // 1. Oculta la pantalla del sobre
       document.getElementById('envelope-screen').classList.add('hidden');
-
-      // 2. Activa el audio inmediatamente tras el clic
-      if (audio) {
-        audio.play().then(() => {
-          musicBtn.innerHTML = "🔊";
-        }).catch((err) => {
-          console.log("El navegador bloqueó la reproducción:", err);
-          musicBtn.innerHTML = "🔇";
-        });
-      }
-    }
-
-    function toggleAudio() {
-      if (audio.paused) {
-        audio.play();
-        musicBtn.innerHTML = "🔊";
-      } else {
-        audio.pause();
-        musicBtn.innerHTML = "🔇";
-      }
     }
 
     function openModal(id) {
