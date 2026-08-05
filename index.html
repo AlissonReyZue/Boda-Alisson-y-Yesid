@@ -228,7 +228,7 @@
       line-height: 1.6;
     }
 
-    /* BOTÓN FLOTANTE CONTROL MÚSICA */
+    /* BOTÓN FLOTANTE MÚSICA */
     .music-toggle-btn {
       position: fixed;
       bottom: 25px;
@@ -337,12 +337,12 @@
 </head>
 <body>
 
-  <!-- ELEMENTO AUDIO NATIVO -->
+  <!-- AUDIO HTML5 CON REPRODUCCIÓN AL CLIC -->
   <audio id="wedding-audio" loop preload="auto">
     <source src="perfect.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- BOTÓN FLOTANTE MÚSICA -->
+  <!-- BOTÓN FLOTANTE PARA ACTIVAR/DESACTIVAR -->
   <button class="music-toggle-btn" id="music-btn" onclick="toggleAudio()">
     🎵
   </button>
@@ -485,21 +485,21 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT: ACTIVACIÓN AL HACER CLIC EN ABRIR -->
+  <!-- JAVASCRIPT: ACTIVACIÓN AL HACER CLIC -->
   <script>
     const audio = document.getElementById('wedding-audio');
     const musicBtn = document.getElementById('music-btn');
 
     function openEnvelope() {
-      // Ocultar la pantalla del sobre
+      // 1. Oculta la pantalla del sobre
       document.getElementById('envelope-screen').classList.add('hidden');
 
-      // Reproducir audio al instante (Aprobado por el evento click del usuario)
+      // 2. Activa el audio inmediatamente tras el clic
       if (audio) {
         audio.play().then(() => {
           musicBtn.innerHTML = "🔊";
         }).catch((err) => {
-          console.log("Error al reproducir audio:", err);
+          console.log("El navegador bloqueó la reproducción:", err);
           musicBtn.innerHTML = "🔇";
         });
       }
