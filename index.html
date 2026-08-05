@@ -139,6 +139,38 @@
             transform: scale(1.1) rotate(5deg);
         }
 
+        /* Botón flotante para el control de música */
+        .music-control-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            z-index: 999;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: white;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        .music-control-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .music-control-btn:hover {
+            transform: scale(1.1);
+        }
+
         /* 2. Contenido Principal */
         .main-content {
             opacity: 0;
@@ -347,6 +379,17 @@
 </head>
 <body>
 
+    <!-- Elemento de Audio (Música de fondo) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="perfect.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Botón flotante para pausar/reproducir audio -->
+    <button id="music-btn" class="music-control-btn" onclick="toggleMusica()" title="Pausar/Reproducir Música">
+        <i id="music-icon" class="fa-solid fa-music"></i>
+    </button>
+
     <div class="mobile-card">
         
         <!-- 1. Pantalla de Bienvenida con Sobre -->
@@ -425,7 +468,7 @@
                 </a>
             </div>
 
-            <!-- Código de Vestimenta (Nueva Sección) -->
+            <!-- Código de Vestimenta -->
             <div class="section-card">
                 <div class="icon-header">
                     <i class="fa-solid fa-user-tie"></i>
@@ -483,10 +526,22 @@
 
     <!-- Script de Interactividad -->
     <script>
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        const musicIcon = document.getElementById('music-icon');
+
         function abrirInvitacion() {
             const landing = document.getElementById('landing-screen');
             const main = document.getElementById('main-content');
             
+            // Iniciar reproducción de la canción
+            audio.play().then(() => {
+                // Hacer visible el botón de control de audio cuando el sonido comienza a reproducirse
+                musicBtn.classList.add('visible');
+            }).catch(error => {
+                console.log("Error al reproducir audio:", error);
+            });
+
             landing.style.transform = 'translate(-50%, -100%)';
             landing.style.opacity = '0';
             
@@ -495,6 +550,17 @@
                 main.style.opacity = '1';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 800);
+        }
+
+        // Alternar pausa / reproducción manual de la música
+        function toggleMusica() {
+            if (audio.paused) {
+                audio.play();
+                musicIcon.className = "fa-solid fa-music";
+            } else {
+                audio.pause();
+                musicIcon.className = "fa-solid fa-volume-xmark";
+            }
         }
 
         /* Contador al 3 de Octubre de 2026 */
