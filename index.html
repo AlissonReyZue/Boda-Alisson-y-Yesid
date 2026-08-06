@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda de Alisson & Yesid</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #c5a059;
+            --dark-gold: #9e7d3b;
+            --light-gold: #f4ece1;
+            --bg-cream: #faf7f2;
+            --text-color: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --font-title: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #1a1a1a;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Tarjeta móvil central */
+        .mobile-card {
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--bg-cream);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 40px;
+        }
+
+        /* 1. Pantalla de Bienvenida con Sobre */
+        #landing-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            background: linear-gradient(rgba(250, 247, 242, 0.85), rgba(244, 236, 225, 0.92)),
+                        url('Fondo.jpeg') center/cover no-repeat;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 50px 20px;
+            text-align: center;
+            transition: all 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .landing-header h3 {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--dark-gold);
+            font-weight: 500;
+        }
+
+        .landing-header h1 {
+            font-family: var(--font-title);
+            font-size: 3rem;
+            color: #222;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 260px;
+            height: 180px;
+            background: #e8dcc4;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #dcd0b5;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-top: 95px solid #decfae;
+        }
+
+        .wax-seal {
+            position: relative;
+            z-index: 5;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #d4af37 0%, #aa7c11 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.5);
+            border: 3px solid #f8e8a6;
+            transition: transform 0.4s ease;
+        }
+
+        .envelope-container:hover .wax-seal {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Botón flotante para el control de música */
+        .music-control-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            z-index: 999;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: white;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        .music-control-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .music-control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* 2. Contenido Principal */
+        .main-content {
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        /* Hero Banner con foto de fondo */
+        .hero-section {
+            position: relative;
+            min-height: 560px;
+            background: url('Fondo.jpeg') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px 25px;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%);
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h2 {
+            font-family: var(--font-title);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+        }
+
+        .hero-text h3 {
+            font-size: 1.4rem;
+            font-family: var(--font-title);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            color: #f3e5ab;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+
+        .hero-quote {
+            font-family: var(--font-title);
+            font-style: italic;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #ffffff;
+            border-top: 1px solid rgba(255,255,255,0.35);
+            border-bottom: 1px solid rgba(255,255,255,0.35);
+            padding: 15px 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+        }
+
+        /* Cards Layout */
+        .section-card {
+            background: white;
+            margin: 25px 20px;
+            padding: 35px 22px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(197, 160, 89, 0.25);
+        }
+
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            color: var(--primary-gold);
+            margin-bottom: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .icon-header {
+            font-size: 2.2rem;
+            color: var(--primary-gold);
+            margin-bottom: 12px;
+        }
+
+        /* Estilo para la imagen del código de vestimenta */
+        .dresscode-img {
+            width: 100%;
+            height auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-top: 5px;
+        }
+
+        /* Contador */
+        .countdown-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0 10px;
+        }
+
+        .countdown-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .countdown-num {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .countdown-divider {
+            font-size: 1.5rem;
+            color: #ddd;
+            font-weight: 300;
+        }
+
+        /* Botones */
+        .btn-gold {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.35);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(197, 160, 89, 0.5);
+        }
+
+        .cita-date {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: var(--dark-gold);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .cita-details {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .tips-list {
+            text-align: left;
+            list-style: none;
+            padding: 0 5px;
+        }
+
+        .tips-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .tips-list li::before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: var(--primary-gold);
+            font-size: 1.4rem;
+            top: -3px;
+        }
+
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* Estilo para la frase final */
+        .final-quote {
+            text-align: center;
+            padding: 20px 25px 10px 25px;
+            font-family: var(--font-title);
+            font-size: 1.25rem;
+            font-style: italic;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento de Audio (Música de fondo) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="perfect.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Botón flotante para pausar/reproducir audio -->
+    <button id="music-btn" class="music-control-btn" onclick="toggleMusica()" title="Pausar/Reproducir Música">
+        <i id="music-icon" class="fa-solid fa-music"></i>
+    </button>
+
+    <div class="mobile-card">
+        
+        <!-- 1. Pantalla de Bienvenida con Sobre -->
+        <div id="landing-screen">
+            <div class="landing-header">
+                <h3>Boda de</h3>
+                <h1>Alisson y Yesid</h1>
+            </div>
+
+            <div class="envelope-container" onclick="abrirInvitacion()">
+                <div class="envelope-flap"></div>
+                <div class="wax-seal pulse">
+                    <span>ABRIR</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Tarjeta Principal -->
+        <div class="main-content" id="main-content">
+
+            <!-- Banner Principal -->
+            <div class="hero-section">
+                <div class="hero-overlay"></div>
+                <div class="hero-text">
+                    <h2>Alisson & Yesid</h2>
+                    <h3>¡NUESTRA BODA!</h3>
+                    <p class="hero-quote">
+                        "Hay momentos en la vida que son incomparables, pero compartirlos con quienes más queremos los hace inolvidables"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contador -->
+            <div class="section-card">
+                <div class="section-title">Faltan</div>
+                <div class="countdown-container">
+                    <div class="countdown-box">
+                        <span class="countdown-num" id="cd-days">00</span>
+                        <span class="countdown-label">Días</span>
+                    </div>
+                    <span class="countdown-divider">|</span>
+                    <div class="countdown-box">
+                        <span class="countdown-num" id="cd-hours">00</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <span class="countdown-divider">|</span>
+                    <div class="countdown-box">
+                        <span class="countdown-num" id="cd-mins">00</span>
+                        <span class="countdown-label">Min</span>
+                    </div>
+                    <span class="countdown-divider">|</span>
+                    <div class="countdown-box">
+                        <span class="countdown-num" id="cd-secs">00</span>
+                        <span class="countdown-label">Seg</span>
+                    </div>
+                </div>
+                <div style="font-size: 1.4rem; color: var(--primary-gold); margin-top: 15px;">♥</div>
+            </div>
+
+            <!-- Cita -->
+            <div class="section-card">
+                <div class="icon-header">
+                    <i class="fa-solid fa-ring"></i>
+                </div>
+                <div class="section-title">Cita</div>
+                <div class="cita-date">Sábado 3 de octubre de 2026</div>
+                <div class="cita-details">
+                    <p><strong>Ceremonia:</strong> 4:00 pm</p>
+                    <p><strong>Recepción:</strong> 5:30 pm</p>
+                    <br>
+                    <p><strong>Lugar:</strong> Casa quinta el Rosario - Colinas de Bacatá</p>
+                    <p>Calle 166 # 76-55</p>
+                </div>
+                <a href="https://maps.google.com/?q=Calle+166+%23+76-55" target="_blank" class="btn-gold">
+                    <i class="fa-solid fa-location-dot"></i> ¿Cómo llegar?
+                </a>
+            </div>
+
+            <!-- Código de Vestimenta -->
+            <div class="section-card">
+                <div class="icon-header">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div class="section-title">Código de vestimenta</div>
+                <img src="codigo_vestimenta.jpg" alt="Código de Vestimenta" class="dresscode-img">
+            </div>
+
+            <!-- Música -->
+            <div class="section-card">
+                <div class="icon-header">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <div class="section-title">Música</div>
+                <p style="font-size: 0.95rem; color: #555; margin-bottom: 10px;">
+                    ¿Cuál es la canción que no puede faltar en la lista de reproducción de la fiesta?
+                </p>
+                <a href="https://forms.gle/MxiSGRKQJFjsGQzn8" target="_blank" class="btn-gold">
+                    <i class="fa-solid fa-compact-disc"></i> Sugerir canción
+                </a>
+            </div>
+
+            <!-- Tips y Notas -->
+            <div class="section-card">
+                <div class="icon-header">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </div>
+                <div class="section-title">Tips y Notas</div>
+                <ul class="tips-list">
+                    <li>¡Por favor ser puntuales!</li>
+                    <li>Queremos disfrutar de esta fiesta al máximo, por eso decidimos que sea un evento sólo para adultos.</li>
+                    <li>La invitación no contempla acompañantes adicionales.</li>
+                    <li>Hay disponibilidad de parqueadero.</li>
+                    <li>Finalizado el servicio de barra libre ofrecido por los novios, los invitados tendrán a su disposición una barra con precios amigables.</li>
+                </ul>
+            </div>
+
+            <!-- Confirmación -->
+            <div class="section-card">
+                <div class="icon-header">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="section-title">Confirmación</div>
+                <p style="font-size: 0.95rem; color: #444; margin-bottom: 10px;">
+                    Confirmar asistencia antes del 13 de septiembre.
+                </p>
+                <a href="https://forms.gle/mqiwJPEiBdX3rYa27" target="_blank" class="btn-gold">
+                    <i class="fa-solid fa-paper-plane"></i> Confirmación
+                </a>
+            </div>
+
+            <!-- Frase Final -->
+            <div class="final-quote">
+                "Mientras uno este vivo, uno debe amar lo más que pueda"
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script de Interactividad -->
+    <script>
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        const musicIcon = document.getElementById('music-icon');
+
+        function abrirInvitacion() {
+            const landing = document.getElementById('landing-screen');
+            const main = document.getElementById('main-content');
+            
+            // Iniciar reproducción de la canción
+            audio.play().then(() => {
+                // Hacer visible el botón de control de audio cuando el sonido comienza a reproducirse
+                musicBtn.classList.add('visible');
+            }).catch(error => {
+                console.log("Error al reproducir audio:", error);
+            });
+
+            landing.style.transform = 'translate(-50%, -100%)';
+            landing.style.opacity = '0';
+            
+            setTimeout(() => {
+                landing.style.display = 'none';
+                main.style.opacity = '1';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 800);
+        }
+
+        // Alternar pausa / reproducción manual de la música
+        function toggleMusica() {
+            if (audio.paused) {
+                audio.play();
+                musicIcon.className = "fa-solid fa-music";
+            } else {
+                audio.pause();
+                musicIcon.className = "fa-solid fa-volume-xmark";
+            }
+        }
+
+        /* Contador al 3 de Octubre de 2026 */
+        const targetDate = new Date("October 3, 2026 16:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                document.getElementById("cd-days").innerText = "00";
+                document.getElementById("cd-hours").innerText = "00";
+                document.getElementById("cd-mins").innerText = "00";
+                document.getElementById("cd-secs").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = days < 10 ? '0' + days : days;
+            document.getElementById("cd-hours").innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById("cd-mins").innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById("cd-secs").innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
